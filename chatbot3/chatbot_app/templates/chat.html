@@ -1,0 +1,53 @@
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+
+
+<html>
+  <head>
+    <title>Chatbot</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+  </head>
+  <body>
+    <div id="chat-window">
+      <div id="prompt">{{ prompt }}</div>
+      <div id="output"></div>
+      <div id="input-form">
+        <form id="message-form" enctype="multipart/form-data">
+          {% csrf_token %}
+          
+          <input type="file" name="file">
+          <!-- <input type="text" name="message" id="message-input"> -->
+          <button type="submit">Upload a csv file for analysis</button>
+          <br>
+          <br>
+          <input type="text" name="message" id="message-input">
+          <button type="submit">Send</button>
+        </form>
+      </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+      $(document).ready(function() {
+        $('#message-form').submit(function(event) {
+          event.preventDefault();
+          var formData = new FormData(event.target);
+          $.ajax({
+            url: '/chat/',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(data) {
+                console.log(data.response);
+              $('#output').append('<p><b>AI: </b> ' + data.response + '</p>');
+            }
+          });
+        //   $('#message-form').trigger('reset');
+          $('#output').append('<p><b>You: </b> ' + formData.get('message') + '</p>');
+          $('#message-form').trigger('reset');
+        });
+      });
+    </script>
+  </body>
+</html>

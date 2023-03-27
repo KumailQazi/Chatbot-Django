@@ -1,0 +1,72 @@
+/* Chat window styles */
+#chat-window {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #F6F7F8;
+    border-radius: 5px;
+  }
+  
+  /* Prompt styles */
+  #prompt {
+    font-size: 14px;
+    margin-bottom: 10px;
+  }
+  
+  /* Output styles */
+  #output {
+    font-size: 14px;
+    margin-bottom: 10px;
+  }
+  
+  /* Input form styles */
+  #input-form {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+  
+  #input-form input[type="text"] {
+    flex-grow: 1;
+    margin-right: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    border: none;
+    box-shadow: inset 0 0 5px #D1D1D1;
+  }
+  
+  #input-form button[type="submit"] {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 5px;
+    border: none;
+    box-shadow: 0 0 5px #4CAF50;
+    cursor: pointer;
+  }
+  
+  #input-form button[type="submit"]:hover {
+    background-color: #3E8E41;
+    box-shadow: 0 0 5px #3E8E41;
+  }
+  
+  /* File upload styles */
+  #input-form input[type="file"] {
+    margin-right: 10px;
+  }
+  
+  #input-form input[type="file"]::-webkit-file-upload-button {
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 5px;
+    border: none;
+    padding: 10px 20px;
+    box-shadow: 0 0 5px #4CAF50;
+    cursor: pointer;
+  }
+  
+  #input-form input[type="file"]::-webkit-file-upload-button:hover {
+    background-color: #3E8E41;
+    box-shadow: 0 0 5px #3E8E41;
+  }
+  
