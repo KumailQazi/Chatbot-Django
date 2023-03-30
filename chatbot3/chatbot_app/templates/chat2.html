@@ -1,0 +1,54 @@
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chatbot</title>
+    <link rel="stylesheet" href="{% static 'css/styles2.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/mobile.css' %}" media="(max-width: 768px)" />
+  </head>
+  <body>
+    <div id="chat-window">
+      <div id="prompt">{{ prompt }}</div>
+      <div id="output"></div>
+      <div id="input-form">
+        <form id="message-form" enctype="multipart/form-data">
+          {% csrf_token %}
+
+          <input type="file" name="file" id="file-input" />
+          <label for="file-input" id="file-label">Choose a CSV file for analysis</label>
+          <input type="submit" value="Upload" id="file-submit" />
+          <input type="text" name="message" id="message-input" placeholder="Type your message here" />
+          <button type="submit" id="message-submit">Send</button>
+        </form>
+      </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+      $(document).ready(function () {
+        $('#message-form').submit(function (event) {
+          event.preventDefault();
+          var formData = new FormData(event.target);
+          $.ajax({
+            url: '/chat/',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (data) {
+              console.log(data.response);
+              $('#output').append('<p><b>AI: </b> ' + data.response + '</p>');
+            }
+          });
+          $('#output').append('<p><b>You: </b> ' + formData.get('message') + '</p>');
+          $('#message-form').trigger('reset');
+        });
+      });
+    </script>
+  </body>
+</html>

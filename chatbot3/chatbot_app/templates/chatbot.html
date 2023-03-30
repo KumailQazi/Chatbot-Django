@@ -1,0 +1,61 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Chatbot</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  </head>
+  <body>
+    <h1>Chatbot</h1>
+    <div class="container">
+      <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% if not csv_uploaded %}
+        <label for="csv">Upload CSV File:</label>
+        <input type="file" name="csv" id="csv">
+        {% endif %}
+        <label for="question">Ask a Question:</label>
+        <input type="text" name="question" id="question">
+        <button type="submit">Ask</button>
+      </form>
+      <div id="answer"></div>
+    </div>
+    <!-- <script src="{% static 'js/script.js' %}"></script> -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+      $(document).ready(function() {
+        var csv_uploaded = {% if csv_uploaded %} true {% else %} false {% endif %};
+
+        $('#message-form').submit(function(event) {
+          event.preventDefault();
+
+          if (!csv_uploaded) {
+            var formData = new FormData();
+            formData.append('csv', $('#csv')[0].files[0]);
+            csv_uploaded = true;
+          }
+
+          var question = $('#question').val();
+          var formData = new FormData(event.target);
+          formData.set('question', question);
+
+          $.ajax({
+            url: '/chatbot/',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(data) {
+              console.log(data.response);
+              $('#answer').append('<p><b>You: </b> ' + question + '</p>');
+              $('#answer').append('<p><b>AI: </b> ' + data.response + '</p>');
+            }
+          });
+          $('#message-form').trigger('reset');
+        });
+      });
+    </script>
+  </body>
+</html>
